@@ -1,0 +1,5 @@
+package com.artconnect.artist.service;
+
+public class ArtistService {
+
+}

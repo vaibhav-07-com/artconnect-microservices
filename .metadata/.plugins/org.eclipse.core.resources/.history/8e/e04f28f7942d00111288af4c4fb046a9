@@ -1,0 +1,5 @@
+package com.artconnect.artist.repository;
+
+public interface ArtistRepository {
+
+}

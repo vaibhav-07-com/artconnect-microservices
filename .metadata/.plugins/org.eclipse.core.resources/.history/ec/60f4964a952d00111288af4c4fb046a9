@@ -1,0 +1,5 @@
+package com.artconnect.artist.controller;
+
+public class ArtistController {
+
+}
