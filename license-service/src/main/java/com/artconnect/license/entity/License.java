@@ -26,4 +26,6 @@ public class License {
     private Double price;
 
     private String buyerEmail;
+    
+    private String certificateUrl;
 }

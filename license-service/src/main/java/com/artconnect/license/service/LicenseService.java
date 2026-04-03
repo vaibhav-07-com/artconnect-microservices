@@ -11,6 +11,7 @@ import com.artconnect.license.dto.LicenseResponse;
 import com.artconnect.license.entity.License;
 import com.artconnect.license.enums.LicenseStatus;
 import com.artconnect.license.repository.LicenseRepository;
+import com.artconnect.license.util.LicensePdfGenerator;
 import com.artconnect.license.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -55,10 +56,16 @@ public class LicenseService {
     public LicenseResponse approve(Long id){
 
         License license = repo.findById(id)
-                .orElseThrow(() -> 
+                .orElseThrow(() ->
                     new ResourceNotFoundException("License not found"));
 
         license.setStatus(LicenseStatus.APPROVED);
+
+        // generate pdf
+        byte[] pdf = LicensePdfGenerator.generate(license);
+
+        // fake url (for now)
+        license.setCertificateUrl("/license/pdf/" + license.getId());
 
         License saved = repo.save(license);
 
@@ -67,7 +74,8 @@ public class LicenseService {
         LicenseResponse response = new LicenseResponse();
         response.setId(saved.getId());
         response.setStatus(saved.getStatus().name());
-        response.setMessage("License approved successfully");
+        response.setMessage("License approved and certificate generated");
+        response.setCertificateUrl(saved.getCertificateUrl());
 
         return response;
     }
@@ -78,6 +86,15 @@ public class LicenseService {
 
     public List<License> byArtist(Long artistId){
         return repo.findByArtistId(artistId);
+    }
+    
+    public byte[] generatePdf(Long id){
+
+        License license = repo.findById(id)
+                .orElseThrow(() -> 
+                    new ResourceNotFoundException("License not found"));
+
+        return LicensePdfGenerator.generate(license);
     }
 
     public List<License> byStatus(LicenseStatus status){

@@ -2,6 +2,7 @@ package com.artconnect.license.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,4 +49,16 @@ public class LicenseController {
     public List<License> byStatus(@PathVariable LicenseStatus status){
         return service.byStatus(status);
     }
+    
+    @GetMapping("/pdf/{id}")
+    public ResponseEntity<byte[]> download(@PathVariable Long id){
+
+        byte[] pdf = service.generatePdf(id);
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition",
+                        "attachment; filename=license.pdf")
+                .body(pdf);
+    }
+    
 }
