@@ -2,6 +2,8 @@ package com.artconnect.license.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import com.artconnect.license.enums.LicenseType;
+import com.artconnect.license.enums.LicenseStatus;
 
 @Entity
 @Data
@@ -15,11 +17,13 @@ public class License {
 
     private Long artistId;
 
-    private String licenseType; // personal, commercial
+    @Enumerated(EnumType.STRING)
+    private LicenseType licenseType;
+
+    @Enumerated(EnumType.STRING)
+    private LicenseStatus status;
 
     private Double price;
-
-    private String status; // REQUESTED, APPROVED
 
     private String buyerEmail;
 }

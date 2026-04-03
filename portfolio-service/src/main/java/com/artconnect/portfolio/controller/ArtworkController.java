@@ -35,4 +35,9 @@ public class ArtworkController {
     public List<Artwork> byArtist(@PathVariable Long artistId){
         return service.getByArtist(artistId);
     }
+    
+    @GetMapping("/{id}")
+    public Artwork getById(@PathVariable Long id){
+        return service.getById(id);
+    }
 }

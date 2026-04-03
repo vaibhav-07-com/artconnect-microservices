@@ -29,4 +29,8 @@ public class ArtworkService {
                    .filter(a -> a.getArtistId().equals(artistId))
                    .toList();
     }
+    
+    public Artwork getById(Long id){
+        return repo.findById(id).orElse(null);
+    }
 }

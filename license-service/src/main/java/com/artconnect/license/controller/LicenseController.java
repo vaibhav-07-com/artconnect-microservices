@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.artconnect.license.dto.LicenseResponse;
 import com.artconnect.license.entity.License;
+import com.artconnect.license.enums.LicenseStatus;
 import com.artconnect.license.service.LicenseService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,17 +25,27 @@ public class LicenseController {
     private final LicenseService service;
 
     @PostMapping("/request")
-    public License request(@RequestBody License license){
+    public LicenseResponse request(@RequestBody License license){
         return service.request(license);
     }
 
     @PutMapping("/approve/{id}")
-    public License approve(@PathVariable Long id){
+    public LicenseResponse approve(@PathVariable Long id){
         return service.approve(id);
     }
 
     @GetMapping
     public List<License> getAll(){
         return service.getAll();
+    }
+    
+    @GetMapping("/artist/{artistId}")
+    public List<License> byArtist(@PathVariable Long artistId){
+        return service.byArtist(artistId);
+    }
+    
+    @GetMapping("/status/{status}")
+    public List<License> byStatus(@PathVariable LicenseStatus status){
+        return service.byStatus(status);
     }
 }
