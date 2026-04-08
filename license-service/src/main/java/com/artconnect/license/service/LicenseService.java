@@ -2,6 +2,8 @@ package com.artconnect.license.service;
 
 import java.util.List;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.artconnect.license.client.ArtistClient;
@@ -10,6 +12,7 @@ import com.artconnect.license.client.PortfolioClient;
 import com.artconnect.license.dto.LicenseResponse;
 import com.artconnect.license.entity.License;
 import com.artconnect.license.enums.LicenseStatus;
+import com.artconnect.license.event.LicenseApprovedEvent;
 import com.artconnect.license.repository.LicenseRepository;
 import com.artconnect.license.util.LicensePdfGenerator;
 import com.artconnect.license.exception.ResourceNotFoundException;
@@ -24,6 +27,8 @@ public class LicenseService {
     private final ArtistClient artistClient;
     private final PortfolioClient portfolioClient;
     private final NotificationClient notificationClient;
+    private final ApplicationEventPublisher publisher;
+    private final RabbitTemplate rabbitTemplate;
     
     public LicenseResponse request(License license){
 
@@ -69,7 +74,15 @@ public class LicenseService {
 
         License saved = repo.save(license);
 
-        notificationClient.sendApprovedNotification();
+        LicenseApprovedEvent event = new LicenseApprovedEvent();
+        event.setLicenseId(saved.getId());
+        event.setArtistId(saved.getArtistId());
+        event.setArtworkId(saved.getArtworkId());
+        event.setBuyerEmail(saved.getBuyerEmail());
+
+        System.out.println("Before sending event...");
+        rabbitTemplate.convertAndSend("license.approved", event);
+        System.out.println("Event sent successfully!");
 
         LicenseResponse response = new LicenseResponse();
         response.setId(saved.getId());
