@@ -12,6 +12,8 @@ public class Artwork {
     private Long id;
 
     private String title;
+    
+    private String collection;
 
     private String description;
 

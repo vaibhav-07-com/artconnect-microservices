@@ -2,4 +2,5 @@
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="org.springframework.amqp.rabbit.annotation.EnableRabbit"/>
     <fullyQualifiedTypeName name="org.springframework.amqp.rabbit.annotation.RabbitListener"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
 </qualifiedTypeNameHistroy>
